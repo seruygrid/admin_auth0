@@ -1,6 +1,6 @@
 from django.urls import path
 
-from auth import views
+from admin_auth0 import views
 
 urlpatterns = [
     path('login', views.custom_login, name='login'),

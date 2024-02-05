@@ -10,7 +10,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.urls import reverse_lazy
 
-from auth.authentication import oauth
+from admin_auth0.authentication import oauth
 
 logger = logging.getLogger(__name__)
 
