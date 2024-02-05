@@ -6,7 +6,7 @@ authors = ["Serhii Lakodei <serhii.lakodei@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 django-environ = "^0.11.2"
 pyjwt = "^2.8.0"
 django = "^5.0.1"
