@@ -26,9 +26,9 @@ class DjangoSSOAuthBackend(BaseBackend):
         return cls.objects.get(pk=user_id)
 
     @staticmethod
-    def get_or_create_user_by_email(user_email):
+    def get_or_create_user_by_auth_id(auth_id):
         cls = get_user_model()
-        return cls.objects.get_or_create(email=user_email)
+        return cls.objects.get_or_create(email=auth_id)
 
     def authenticate(self, request, **kwargs):
         if kwargs.get('username') and kwargs.get('password'):
@@ -39,8 +39,9 @@ class DjangoSSOAuthBackend(BaseBackend):
         if not token:
             return None
 
-        user, is_created = self.get_or_create_user_by_email(token['userinfo']['email'])
-        self.update_user_permissions(user, token['access_token'])
+        token_data = self.parse_token(token['access_token'])
+        user, is_created = self.get_or_create_user_by_auth_id(token_data['sub'])
+        self.update_user_permissions(user, token_data)
         return user
 
     @staticmethod
@@ -52,9 +53,7 @@ class DjangoSSOAuthBackend(BaseBackend):
         groups = Group.objects.filter(name__in=permissions)
         user.groups.set(groups)
 
-    def update_user_permissions(self, user, token):
-        token_data = self.parse_token(token)
-
+    def update_user_permissions(self, user, token_data):
         if settings.DJANGO_ADMIN_AUTH0_AUDIENCE not in token_data['aud']:
             return
 
