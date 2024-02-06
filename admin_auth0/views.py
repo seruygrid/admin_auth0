@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.urls import reverse_lazy
 
 from admin_auth0.authentication import oauth
 
@@ -28,7 +27,7 @@ def callback(request):
     else:
         user = authenticate(request, token=token)
         login(request, user)
-    return redirect(urljoin(settings.BACKEND_HOST, reverse_lazy('admin:index')))
+    return redirect(urljoin(settings.BACKEND_HOST, reverse('admin:index')))
 
 
 def logout(request):
@@ -38,7 +37,7 @@ def logout(request):
         f'https://{settings.DJANGO_ADMIN_AUTH0_DOMAIN}/v2/logout?'
         + urlencode(
             {
-                'returnTo': urljoin(settings.BACKEND_HOST, reverse_lazy('admin:index')),
+                'returnTo': urljoin(settings.BACKEND_HOST, reverse('admin:index')),
                 'client_id': settings.DJANGO_ADMIN_AUTH0_CLIENT_ID,
             },
             quote_via=quote_plus,
