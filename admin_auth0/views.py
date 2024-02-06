@@ -1,6 +1,7 @@
 import logging
 from urllib.parse import quote_plus
 from urllib.parse import urlencode
+from urllib.parse import urljoin
 
 from authlib.integrations.base_client.errors import OAuthError
 from django.conf import settings
@@ -16,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 def custom_login(request):
-    return oauth.auth0.authorize_redirect(request, request.build_absolute_uri(reverse('callback')))
+    return oauth.auth0.authorize_redirect(request, urljoin(settings.BACKEND_HOST, reverse('callback')))
 
 
 def callback(request):
@@ -27,7 +28,7 @@ def callback(request):
     else:
         user = authenticate(request, token=token)
         login(request, user)
-    return redirect(request.build_absolute_uri(reverse_lazy('admin:index')))
+    return redirect(urljoin(settings.BACKEND_HOST, reverse_lazy('admin:index')))
 
 
 def logout(request):
@@ -37,7 +38,7 @@ def logout(request):
         f'https://{settings.DJANGO_ADMIN_AUTH0_DOMAIN}/v2/logout?'
         + urlencode(
             {
-                'returnTo': request.build_absolute_uri(reverse_lazy('admin:index')),
+                'returnTo': urljoin(settings.BACKEND_HOST, reverse_lazy('admin:index')),
                 'client_id': settings.DJANGO_ADMIN_AUTH0_CLIENT_ID,
             },
             quote_via=quote_plus,
