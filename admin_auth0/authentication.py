@@ -10,13 +10,13 @@ oauth = OAuth()
 
 oauth.register(
     'auth0',
-    client_id=settings.AUTH0_CLIENT_ID,
-    client_secret=settings.AUTH0_CLIENT_SECRET,
+    client_id=settings.DJANGO_ADMIN_AUTH0_CLIENT_ID,
+    client_secret=settings.DJANGO_ADMIN_AUTH0_CLIENT_SECRET,
     authorize_params={
-        'audience': settings.AUTH0_AUDIENCE,
-        'scope': settings.AUTH0_SCOPE,
+        'audience': settings.DJANGO_ADMIN_AUTH0_AUDIENCE,
+        'scope': settings.DJANGO_ADMIN_AUTH0_SCOPE,
     },
-    server_metadata_url=f'https://{settings.AUTH0_DOMAIN}/.well-known/openid-configuration',
+    server_metadata_url=f'https://{settings.DJANGO_ADMIN_AUTH0_DOMAIN}/.well-known/openid-configuration',
 )
 
 
@@ -55,7 +55,7 @@ class DjangoSSOAuthBackend(BaseBackend):
     def update_user_permissions(self, user, token):
         token_data = self.parse_token(token)
 
-        if settings.AUTH0_AUDIENCE not in token_data['aud']:
+        if settings.DJANGO_ADMIN_AUTH0_AUDIENCE not in token_data['aud']:
             return
 
         permissions = token_data.get('permissions', [])
@@ -64,7 +64,7 @@ class DjangoSSOAuthBackend(BaseBackend):
             return
 
         user.is_staff = True
-        user.is_superuser = settings.AUTH0_SUPER_ADMIN_ROLE in permissions
+        user.is_superuser = settings.DJANGO_ADMIN_AUTH0_SUPER_ADMIN_ROLE in permissions
         user.save()
         self.update_user_groups(user, permissions)
         return

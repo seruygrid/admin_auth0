@@ -34,11 +34,11 @@ def logout(request):
     request.session.clear()
 
     return redirect(
-        f'https://{settings.AUTH0_DOMAIN}/v2/logout?'
+        f'https://{settings.DJANGO_ADMIN_AUTH0_DOMAIN}/v2/logout?'
         + urlencode(
             {
                 'returnTo': request.build_absolute_uri(reverse_lazy('admin:index')),
-                'client_id': settings.AUTH0_CLIENT_ID,
+                'client_id': settings.DJANGO_ADMIN_AUTH0_CLIENT_ID,
             },
             quote_via=quote_plus,
         ),
