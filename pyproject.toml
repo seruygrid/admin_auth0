@@ -1,12 +1,12 @@
 [tool.poetry]
 name = "admin_auth0"
-version = "0.2.8"
+version = "0.2.9"
 description = ""
 authors = ["Serhii Lakodei <serhii.lakodei@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.9"
 django-environ = ">=0.10.0"
 pyjwt = ">=2.8.0"
 django = ">=4.2.2"
