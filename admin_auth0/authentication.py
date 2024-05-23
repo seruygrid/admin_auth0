@@ -28,7 +28,7 @@ class DjangoSSOAuthBackend(BaseBackend):
     @staticmethod
     def get_or_create_user_by_auth_id(auth_id):
         cls = get_user_model()
-        return cls.objects.get_or_create(email=auth_id)
+        return cls.objects.get_or_create(username=auth_id)
 
     def authenticate(self, request, **kwargs):
         if kwargs.get('username') and kwargs.get('password'):
